@@ -4,6 +4,31 @@
   <title>DashingRailsDemo</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+
+  <!-- Shopify Analytics API -->
+  <script src="https://cdn.shopify.com/s/assets/external/app.js"></script>
+  <script type="text/javascript">
+      ShopifyApp.init({
+        apiKey: '',
+        shopOrigin: 'https://cerealkiller2.myshopify.com'
+      });
+
+      ShopifyApp.ready(function(){
+        var shopifyQL = "SHOW count() FROM visits SINCE -2w UNTIL today";
+        var renderData = function(response) {
+          View.render('.result', response);
+        };
+        var handleError = function(response) {
+          // handle missing API errors here (missing scopes, back shopifyql, etc...)
+        };
+        ShopifyApp.Analytics.fetch({
+          query: shopifyQL,
+          success: renderData,
+          error: handleError
+        });
+      });
+
+  </script>
   <%= csrf_meta_tags %>
 </head>
 <body>
